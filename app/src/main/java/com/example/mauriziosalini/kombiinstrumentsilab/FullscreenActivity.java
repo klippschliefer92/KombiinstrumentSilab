@@ -1,12 +1,18 @@
 package com.example.mauriziosalini.kombiinstrumentsilab;
 
 import android.annotation.SuppressLint;
+import android.graphics.Matrix;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.os.Handler;
 import android.view.MotionEvent;
 import android.view.View;
+import android.view.animation.Animation;
+import android.view.animation.LinearInterpolator;
+import android.view.animation.RotateAnimation;
+import android.widget.ImageView;
+import android.widget.TextView;
 
 /**
  * An example full-screen activity that shows and hides the system UI (i.e.
@@ -18,6 +24,14 @@ public class FullscreenActivity extends AppCompatActivity {
      * {@link #AUTO_HIDE_DELAY_MILLIS} milliseconds.
      */
     private static final boolean AUTO_HIDE = true;
+
+    //TCP server_ip and port
+    public ImageView imageView;
+    public ImageView imageView2;
+    public TextView textViewConsumption;
+    public TextView textViewGear;
+    String server = "192.168.2.105";
+    int port = 25143;
 
     /**
      * If {@link #AUTO_HIDE} is set, the number of milliseconds to wait after
@@ -92,8 +106,6 @@ public class FullscreenActivity extends AppCompatActivity {
         mVisible = true;
 
         mContentView = findViewById(R.id.fullscreen_content);
-
-
         // Set up the user interaction to manually show or hide the system UI.
         mContentView.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -103,6 +115,26 @@ public class FullscreenActivity extends AppCompatActivity {
         });
 
         //test
+        imageView = (ImageView) findViewById(R.id.imageView7);
+        imageView2 = (ImageView) findViewById(R.id.imageView8);
+        textViewConsumption = (TextView) findViewById(R.id.textView);
+        textViewGear = (TextView) findViewById(R.id.textView2);
+
+        RotateAnimation rotate = new RotateAnimation(0, -45, Animation.RELATIVE_TO_SELF, 0.5f, Animation.RELATIVE_TO_SELF, 0.5f);
+        rotate.setDuration(100);
+        rotate.setInterpolator(new LinearInterpolator());
+        rotate.setFillAfter(true);
+        imageView.startAnimation(rotate);
+
+        RotateAnimation rotate2 = new RotateAnimation(0, -45, Animation.RELATIVE_TO_SELF, 0.5f, Animation.RELATIVE_TO_SELF, 0.5f);
+        rotate2.setDuration(100);
+        rotate2.setInterpolator(new LinearInterpolator());
+        rotate2.setFillAfter(true);
+        imageView2.startAnimation(rotate2);
+
+        Client client = new Client(server, port, imageView, imageView2, textViewConsumption, textViewGear);
+        client.execute();
+
     }
 
     @Override
