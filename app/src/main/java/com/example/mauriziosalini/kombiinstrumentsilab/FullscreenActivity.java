@@ -14,6 +14,8 @@ import android.view.animation.RotateAnimation;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import java.text.SimpleDateFormat;
+
 /**
  * An example full-screen activity that shows and hides the system UI (i.e.
  * status bar and navigation/system bar) with user interaction.
@@ -28,8 +30,9 @@ public class FullscreenActivity extends AppCompatActivity {
     //TCP server_ip and port
     public ImageView imageView;
     public ImageView imageView2;
-    public TextView textViewConsumption;
+    public TextView textViewkm;
     public TextView textViewGear;
+    public TextView textViewClock;
     String server = "192.168.2.105";
     int port = 25143;
 
@@ -117,8 +120,9 @@ public class FullscreenActivity extends AppCompatActivity {
         //test
         imageView = (ImageView) findViewById(R.id.imageView7);
         imageView2 = (ImageView) findViewById(R.id.imageView8);
-        textViewConsumption = (TextView) findViewById(R.id.textView);
+        textViewkm = (TextView) findViewById(R.id.textView);
         textViewGear = (TextView) findViewById(R.id.textView2);
+        textViewClock = (TextView) findViewById(R.id.textView3);
 
         RotateAnimation rotate = new RotateAnimation(0, -45, Animation.RELATIVE_TO_SELF, 0.5f, Animation.RELATIVE_TO_SELF, 0.5f);
         rotate.setDuration(100);
@@ -132,8 +136,36 @@ public class FullscreenActivity extends AppCompatActivity {
         rotate2.setFillAfter(true);
         imageView2.startAnimation(rotate2);
 
-        Client client = new Client(server, port, imageView, imageView2, textViewConsumption, textViewGear);
+        Client client = new Client(server, port, imageView, imageView2, textViewkm, textViewGear);
         client.execute();
+
+        Thread t = new Thread(){
+            @Override
+            public void run(){
+                try {
+                    while (!isInterrupted()){
+                        Thread.sleep(1000);
+                        runOnUiThread(new Runnable() {
+                            @Override
+                            public void run() {
+                                long date = System.currentTimeMillis();
+                                SimpleDateFormat sdf = new SimpleDateFormat("hh:mm");
+                                String timeString = sdf.format(date);
+                                textViewClock.setText(timeString + " Uhr");
+                            }
+                        });
+                    }
+                }catch (InterruptedException e){
+
+                }
+            }
+
+        };
+
+        t.start();
+
+
+
 
     }
 

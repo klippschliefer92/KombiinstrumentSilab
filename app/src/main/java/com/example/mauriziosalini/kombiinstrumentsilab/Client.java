@@ -23,25 +23,26 @@ public class Client extends AsyncTask<Void, Float, Float> {
     ImageView imageView;
     ImageView imageView2;
     TextView textViewGear;
-    TextView textViewConsumption;
+    TextView textViewkm;
 
     String server;
     int port;
     double speed;
     double rpm;
-    double consumption;
+    double km;
     double gear;
     float angle;
     float angle2;
+    String geartext;
 
 
 
-    public Client(String server, int port, ImageView imageView, ImageView imageView2, TextView textViewConsumption, TextView textViewGear){
+    public Client(String server, int port, ImageView imageView, ImageView imageView2, TextView textViewkm, TextView textViewGear){
         this.server = server;
         this.port = port;
         this.imageView = imageView;
         this.imageView2 = imageView2;
-        this.textViewConsumption = textViewConsumption;
+        this.textViewkm = textViewkm;
         this.textViewGear = textViewGear;
     }
 
@@ -64,8 +65,8 @@ public class Client extends AsyncTask<Void, Float, Float> {
         rotate2.setFillAfter(true);
         imageView2.startAnimation(rotate2);
 
-        textViewConsumption.setText(Double.toString(consumption));
-        textViewGear.setText(Double.toString(gear));
+        textViewkm.setText(Double.toString(km));
+        textViewGear.setText(geartext);
 
        // textView.setText(Double.toString(speed[0]));
 
@@ -84,18 +85,38 @@ public class Client extends AsyncTask<Void, Float, Float> {
                 speed = dis.readDouble();
                 rpm = dis.readDouble();
                 gear = dis.readDouble();
-                consumption = dis.readDouble();
+                km = dis.readDouble();
 
 
-                speed = Math.round(speed);
                 speed = (speed * 1.038) - 45;
                 rpm = Math.round(rpm);
                 rpm = (rpm * 0.0337) -45;
 
                 gear = Math.round(gear);
+                if (gear == 1){
+                    geartext = "1";
+                }
+                if (gear == 2){
+                    geartext = "2";
+                }
+                if (gear == 3){
+                    geartext = "3";
+                }
+                if (gear == 4){
+                    geartext = "4";
+                }
+                if (gear == 5) {
+                    geartext = "5";
+                }
+                if (gear == 6){
+                    geartext = "6";
+                }
+                if (gear == 7){
+                    geartext = "7";
+                }
 
-                consumption = consumption * 4.83;
-                consumption = Math.round(consumption * 100.0)/100.0;
+                km = km * 0.001;
+                km = Math.round(km * 100.0)/100.0;
 
                 angle = (float)speed;
                 angle2 = (float)rpm;
